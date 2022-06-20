@@ -7,9 +7,9 @@ def get_number():
 
 def say_number(num, need):
 	if need > num:
-		return 'больше'
+		return 1
 	elif need < num:
-		return 'меньше'
+		return 0
 	else:
 		return 'Ура!'
 
@@ -17,17 +17,22 @@ def say_number(num, need):
 
 if __name__ == "__main__":
 	need = get_number()
+	num = round(max / 2)
 	max = 100
 	min = 0
+	
 
 	while True:
-		num = input('Введите число: \n')
-		num = int(num)
 		ans = say_number(num, need)
 
-		print(ans)
-		if ans == 'Ура!':
+		if ans == 1:
+			num = num + round(num/2)
+		elif ans == 0:
+			num = num - round(num/2)
+		else:
 			break
+
+		print(num)
 			
 
 	print(need)
