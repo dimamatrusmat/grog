@@ -1,15 +1,37 @@
-def sum(square):
+from collections import deque
 
-    if (square[0] > square[1]):
-        max, min = square[0], square[1]
-    else:
-        min, max = square[0], square[1]
+graph = {}
+graph['you'] = ['alice', 'bob', 'claire']
+graph['bob'] = ['anuj', 'peggy']
+graph['alice'] = ['peggy']
+graph['claire'] = ['thom', 'jonny']
+graph['anuj'] = []
+graph['peggy'] = []
+graph['thom'] = []
+graph['jonny'] = []
 
-    if (max % min == 0):
-        return [min, min]
-    else:
-        e = max // min
-        o = max - min * e
-        return sum([min, o])
+search_queue = deque()
+search_queue += graph['you']
+searched = []
 
-print(sum([15, 130]))
+
+def search(search_queue):
+    while search_queue:
+        person = search_queue.popleft()
+        if not person in searched:
+            if presonal_quite(person):
+                print(person + ' is quite!')
+            else:
+                search_queue += graph[person]
+
+            searched.append(person)
+
+    return False
+
+
+def presonal_quite(name):
+    return name[-1] == 'm'
+
+
+if __name__ == '__main__':
+    search(search_queue)
