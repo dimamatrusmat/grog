@@ -1,5 +1,8 @@
 from docx2pdf import convert
+import win32print
+import win32api
 import pikepdf
+import sys
 import os
 
 
@@ -33,6 +36,18 @@ def doc_crushing(doc_path, arr, outpdf):
 
 		pdf.save(outdir+outpdf)
 	   
+def print_pdf(input_pdf, mode=2):
+
+	name = win32print.GetDefaultPrinter()
+	printdefaults = {"DesiredAccess": win32print.PRINTER_ALL_ACCESS} 
+	handle = win32print.OpenPrinter(name, printdefaults)
+	level = 2
+	attributes = win32print.GetPrinter(handle, level)
+
+	attributes['pDevMode'].Duplex = mode   #flip over  3 - это короткий 2 - это длинный край
+	win32print.SetPrinter(handle, level, attributes, 0)
+	win32print.GetPrinter(handle, level)['pDevMode'].Duplex
+	win32api.ShellExecute(0,'print', input_pdf,'.','/manualstoprint',0)
 
 def main():
 	input_files = tackword(next(os.walk('.\\input'))[2])
@@ -85,6 +100,19 @@ def main():
 
 				pdf.save(outdir+out)
 
+	files_to_print = []
+
+	inputs_print = next(os.walk('.\\output'))[2]
+
+	#Печатаем документы
+	for input_print in inputs_print:
+
+		path_print = outdir + input_print
+
+		if 'Экзаменационный' in input_print:
+			print_pdf(path_print, 3)
+        else:
+        	print_pdf(path_print, 2)
 
 if __name__ == '__main__':
 	main()
